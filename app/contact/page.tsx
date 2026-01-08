@@ -1,127 +1,107 @@
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { WhatsAppForm } from "@/components/features/WhatsAppForm";
+import { MapPin, Phone, Mail, Clock, Shield } from "lucide-react";
 
 export const metadata = {
-  title: "Contact - MHM Autos Bagnolet",
-  description: "Prenez rendez-vous chez MHM Autos. 14 Rue de l'Épine Prolongée, 93170 Bagnolet.",
+  title: "Contact & Rendez-vous - MHM Autos",
+  description: "Prenez rendez-vous chez MHM Autos Bagnolet via WhatsApp ou téléphone.",
 };
 
 export default function ContactPage() {
   return (
-    <div className="pt-20">
-      <Section className="bg-black min-h-screen">
+    <div className="pt-24 min-h-screen bg-black">
+      <Section>
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
             
-            {/* Contact Info */}
+            {/* Left Column: Info */}
             <div className="space-y-12">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">Contactez-nous</h1>
                 <p className="text-xl text-white/60">
-                  Une question ? Un devis ? Besoin d'un rendez-vous ? 
-                  Notre équipe est à votre écoute.
+                  Une urgence ? Un devis ? Notre équipe vous répond rapidement.
+                  Privilégiez WhatsApp pour une réponse immédiate.
                 </p>
               </div>
 
-              <div className="space-y-8">
-                <div className="flex gap-4">
-                  <div className="bg-white/10 p-4 rounded-full h-fit">
-                    <MapPin className="w-6 h-6 text-white" />
+              <div className="grid gap-6">
+                <Card className="p-6 bg-neutral-900/50 border-white/10 flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0 text-gold">
+                    <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Nous trouver</h3>
-                    <p className="text-white/60 leading-relaxed">
-                      Résidence du Parc de la Noue<br />
-                      14 Rue de l'Épine Prolongée<br />
-                      93170 Bagnolet
+                    <h3 className="text-lg font-bold text-white mb-1">Notre Adresse</h3>
+                    <p className="text-white/70">
+                      14 Rue de l&apos;Épine Prolongée<br />
+                      93170 Bagnolet, France
                     </p>
                   </div>
-                </div>
+                </Card>
 
-                <div className="flex gap-4">
-                  <div className="bg-white/10 p-4 rounded-full h-fit">
-                    <Phone className="w-6 h-6 text-white" />
+                <Card className="p-6 bg-neutral-900/50 border-white/10 flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0 text-gold">
+                    <Phone className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Par téléphone</h3>
-                    <p className="text-white/60 mb-2">Du Lundi au Samedi de 09:00 à 19:00</p>
-                    <a href="tel:+33771785563" className="text-2xl font-bold text-blue-400 hover:text-blue-300 transition-colors">
+                    <h3 className="text-lg font-bold text-white mb-1">Téléphone</h3>
+                    <p className="text-white/70 mb-2">Du Lundi au Samedi, 09h - 19h</p>
+                    <a href="tel:+33771785563" className="text-xl font-bold text-white hover:text-gold transition-colors">
                       07 71 78 55 63
                     </a>
                   </div>
-                </div>
+                </Card>
 
-                <div className="flex gap-4">
-                  <div className="bg-white/10 p-4 rounded-full h-fit">
-                    <Mail className="w-6 h-6 text-white" />
+                <Card className="p-6 bg-neutral-900/50 border-white/10 flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0 text-gold">
+                    <Mail className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Par email</h3>
-                    <a href="mailto:contact@mhmautos.fr" className="text-lg text-white/60 hover:text-white transition-colors">
-                      contact@mhmautos.fr
+                    <h3 className="text-lg font-bold text-white mb-1">Email</h3>
+                    <a href="mailto:mhm.auto@hotmail.com" className="text-white/70 hover:text-white transition-colors">
+                      mhm.auto@hotmail.com
                     </a>
                   </div>
+                </Card>
+              </div>
+              
+              <div className="p-6 rounded-2xl bg-gradient-to-r from-neutral-900 to-black border border-white/10">
+                <div className="flex items-center gap-3 mb-4 text-gold">
+                  <Shield className="w-6 h-6" />
+                  <span className="font-bold uppercase tracking-wider">Engagement Qualité</span>
                 </div>
+                <p className="text-white/60 text-sm">
+                  Nous nous engageons à vous fournir un devis clair avant toute intervention. 
+                  Transparence et honnêteté sont nos maîtres-mots.
+                </p>
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="bg-neutral-900/50 border border-white/10 p-8 rounded-3xl backdrop-blur-sm">
-              <h2 className="text-2xl font-bold text-white mb-6">Envoyez-nous un message</h2>
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstname" className="text-white">Prénom</Label>
-                    <Input id="firstname" placeholder="Jean" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastname" className="text-white">Nom</Label>
-                    <Input id="lastname" placeholder="Dupont" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email</Label>
-                  <Input id="email" type="email" placeholder="jean.dupont@exemple.fr" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-white">Téléphone</Label>
-                  <Input id="phone" type="tel" placeholder="06 12 34 56 78" className="bg-black/50 border-white/10 text-white placeholder:text-white/20" />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="subject" className="text-white">Sujet</Label>
-                  <select 
-                    id="subject"
-                    className="flex h-12 w-full rounded-md border border-white/10 bg-black/50 px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium text-white placeholder:text-white/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    <option value="rdv">Demande de Rendez-vous</option>
-                    <option value="devis">Demande de Devis</option>
-                    <option value="info">Renseignements</option>
-                    <option value="autre">Autre</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message" className="text-white">Message</Label>
-                  <Textarea id="message" placeholder="Détaillez votre demande..." className="min-h-[150px] bg-black/50 border-white/10 text-white placeholder:text-white/20" />
-                </div>
-
-                <Button type="submit" className="w-full h-12 bg-white text-black hover:bg-gray-200 text-lg rounded-full">
-                  Envoyer le message
-                </Button>
-              </form>
+            {/* Right Column: Form */}
+            <div className="lg:sticky lg:top-32 h-fit">
+              <WhatsAppForm />
             </div>
 
           </div>
         </Container>
       </Section>
+
+      {/* Map Section (Placeholder) */}
+      <div className="h-[400px] w-full bg-neutral-900 grayscale opacity-50 relative overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center">
+            <p className="text-white/20 font-bold text-2xl">Carte Google Maps Intégrée</p>
+        </div>
+        {/* In a real scenario, embed Google Maps iframe here */}
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.221528434724!2d2.4168!3d48.8722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDjCsDUyJzE5LjkiTiAywrAyNScwMC_InRQ!5e0!3m2!1sfr!2sfr!4v1620000000000!5m2!1sfr!2sfr" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0, filter: 'grayscale(1) contrast(1.2) brightness(0.8)' }} 
+            allowFullScreen 
+            loading="lazy"
+        />
+      </div>
     </div>
   );
 }

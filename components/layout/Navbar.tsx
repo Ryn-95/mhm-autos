@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Accueil", href: "/" },
+  { name: "À propos", href: "/about" },
   { name: "Services", href: "/services" },
   { name: "Contact", href: "/contact" },
 ];
@@ -19,41 +20,67 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const isLightPage = pathname !== '/';
+  const isDarkText = isLightPage && !scrolled;
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4">
+    <header className={cn(
+      "fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4 transition-all duration-300",
+      // On retire l'invisibilité globale pour garder le logo/burger accessibles
+    )}>
       <motion.div
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        initial={{ y: -100, opacity: 0, maxWidth: "80rem" }}
+        animate={{ 
+            y: 0, 
+            opacity: 1,
+            visibility: "visible",
+            
+            maxWidth: scrolled ? "56rem" : "80rem",
+            backgroundColor: scrolled ? "rgba(0, 0, 0, 0.85)" : "rgba(0, 0, 0, 0)",
+            // La bordure est gérée ici : transparente si pas scrollé, visible si scrollé
+            borderColor: scrolled ? "rgba(255, 255, 255, 0.1)" : "rgba(255, 255, 255, 0)",
+            paddingTop: scrolled ? "12px" : "16px",
+            paddingBottom: scrolled ? "12px" : "16px",
+            paddingLeft: scrolled ? "24px" : "0px",
+            paddingRight: scrolled ? "24px" : "0px",
+            boxShadow: scrolled ? "0 25px 50px -12px rgba(212, 175, 55, 0.05)" : "none",
+            // On gère le flou via le style directement pour l'animer ou le désactiver
+            backdropFilter: scrolled ? "blur(24px)" : "blur(0px)",
+        }}
+        transition={{ 
+            type: "spring", 
+            stiffness: 120, 
+            damping: 20,
+            mass: 0.8
+        }}
         className={cn(
-          "flex items-center justify-between transition-all duration-500 ease-in-out",
-          scrolled
-            ? "w-full max-w-4xl bg-black/80 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 shadow-2xl shadow-gold/5"
-            : "w-full max-w-7xl bg-transparent px-0 py-4"
+          "relative flex items-center justify-between rounded-full w-full z-50",
+          // On retire 'border' et 'backdrop-blur-xl' d'ici car ils créaient le contour fantôme
+          // On laisse motion gérer les styles
         )}
       >
         {/* Logo Section */}
         <Link href="/" className="flex items-center gap-2 group relative z-50">
-           <Logo className={cn("transition-all duration-300", scrolled ? "w-10 h-10" : "w-14 h-14")} />
+           <Logo className={cn("transition-all duration-300", (isDarkText && !isOpen) ? "text-black" : "text-white", scrolled ? "w-8 h-8" : "w-10 h-10")} />
            <span className={cn(
-             "font-display font-bold text-white tracking-wider transition-all duration-300",
-             scrolled ? "text-lg" : "text-2xl"
+             "font-display font-semibold tracking-wide transition-all duration-300",
+             (isDarkText && !isOpen) ? "text-black" : "text-white",
+             scrolled ? "text-base" : "text-lg"
            )}>
-             MHM <span className="text-gold font-light">AUTOS</span>
+             MHM <span className="text-gold">AUTOS</span>
            </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1">
           <div className={cn(
             "flex items-center gap-1 p-1 rounded-full transition-all duration-300",
             scrolled ? "bg-white/5 border border-white/5" : ""
@@ -63,10 +90,10 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-5 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                  "px-4 py-1.5 rounded-full text-xs font-medium tracking-wide transition-all duration-300",
                   pathname === link.href 
-                    ? "bg-gold text-black shadow-lg shadow-gold/20" 
-                    : "text-white/70 hover:text-white hover:bg-white/10"
+                    ? (isDarkText ? "bg-black text-white shadow-lg shadow-black/10" : "bg-white text-black shadow-lg shadow-white/10")
+                    : (isDarkText ? "text-black/70 hover:text-black hover:bg-black/5" : "text-white/70 hover:text-white hover:bg-white/5")
                 )}
               >
                 {link.name}
@@ -77,12 +104,6 @@ export function Navbar() {
 
         {/* CTA Section */}
         <div className="hidden md:flex items-center gap-4">
-           {!scrolled && (
-             <div className="flex flex-col items-end text-right mr-2">
-                <span className="text-[10px] text-gold uppercase tracking-wider font-semibold">Urgence & RDV</span>
-                <span className="text-white font-bold tracking-wider">07 71 78 55 63</span>
-             </div>
-           )}
            <Link href="/contact">
              <Button 
                 size={scrolled ? "default" : "lg"} 
@@ -90,7 +111,9 @@ export function Navbar() {
                   "rounded-full font-bold uppercase tracking-wider transition-all duration-300",
                   scrolled 
                     ? "bg-white text-black hover:bg-gold hover:text-black"
-                    : "bg-gold text-black hover:bg-white hover:text-black shadow-lg shadow-gold/20"
+                    : (isDarkText 
+                        ? "bg-gold text-black hover:bg-black hover:text-white shadow-lg shadow-gold/20"
+                        : "bg-gold text-black hover:bg-white hover:text-black shadow-lg shadow-gold/20")
                 )}
              >
                 <Calendar className={cn("w-4 h-4 mr-2")} />
@@ -101,7 +124,7 @@ export function Navbar() {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white p-2 z-50"
+          className={cn("md:hidden p-2 z-50", (isDarkText && !isOpen) ? "text-black" : "text-white")}
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X className="w-8 h-8 text-gold" /> : <Menu className="w-8 h-8" />}
@@ -118,7 +141,7 @@ export function Navbar() {
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center space-y-8 md:hidden"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-gold/20 via-black to-black opacity-50" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-gold/20 via-black to-black opacity-50 pointer-events-none" />
             
             {navLinks.map((link, i) => (
               <motion.div
@@ -126,6 +149,7 @@ export function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.1 }}
+                className="relative z-50"
               >
                 <Link
                   href={link.href}
@@ -146,12 +170,14 @@ export function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="pt-12 flex flex-col gap-4 w-full px-8 max-w-sm"
+              className="pt-12 flex flex-col gap-4 w-full px-8 max-w-sm relative z-50"
             >
-              <Button className="w-full bg-white/10 border border-white/10 text-white hover:bg-white hover:text-black h-14 text-lg font-bold rounded-full backdrop-blur-md">
-                <Phone className="w-5 h-5 mr-3" />
-                07 71 78 55 63
-              </Button>
+              <a href="tel:0771785563" className="w-full">
+                <Button className="w-full bg-white/10 border border-white/10 text-white hover:bg-white hover:text-black h-14 text-lg font-bold rounded-full backdrop-blur-md">
+                  <Phone className="w-5 h-5 mr-3" />
+                  07 71 78 55 63
+                </Button>
+              </a>
               <Link href="/contact" onClick={() => setIsOpen(false)} className="w-full">
                 <Button className="w-full bg-gold text-black hover:bg-gold-light h-14 text-lg font-bold rounded-full shadow-xl shadow-gold/20">
                   <Calendar className="w-5 h-5 mr-3" />
